@@ -10,7 +10,6 @@ import { AdminDashboard } from "./screens/AdminPage/AdminDashboard";
 import { AdminSubmissions } from "./screens/AdminPage/AdminSubmissions";
 import { AdminWeeks } from "./screens/AdminPage/AdminWeeks";
 import { AdminTimetable } from "./screens/AdminPage/AdminTimetable";
-import { AdminHomeTimes } from "./screens/AdminPage/AdminHomeTimes";
 import "./lib/i18n";
 
 createRoot(document.getElementById("app") as HTMLElement).render(
@@ -26,7 +25,6 @@ createRoot(document.getElementById("app") as HTMLElement).render(
           <Route path="/admin/submissions" element={<AdminSubmissions />} />
           <Route path="/admin/weeks" element={<AdminWeeks />} />
           <Route path="/admin/timetable" element={<AdminTimetable />} />
-          <Route path="/admin/home-times" element={<AdminHomeTimes />} />
         </Routes>
       </Router>
     </ThemeProvider>

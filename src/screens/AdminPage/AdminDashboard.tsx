@@ -44,14 +44,6 @@ export const AdminDashboard = (): JSX.Element => {
             <h2 className="text-lg font-semibold mb-2">{t('schedule')}</h2>
             <p className="text-sm opacity-80">Manage class schedule</p>
           </Button>
-
-          <Button
-            className="p-6 h-auto text-left flex flex-col items-start"
-            onClick={() => navigate('/admin/home-times')}
-          >
-            <h2 className="text-lg font-semibold mb-2">{t('homeTimes')}</h2>
-            <p className="text-sm opacity-80">Manage home times</p>
-          </Button>
         </div>
       </div>
     </div>

@@ -16,20 +16,11 @@ interface TimetableEntry {
   uniform: string;
 }
 
-interface HomeTime {
-  id: string;
-  week: string;
-  day: number;
-  morning_time: string;
-  afternoon_time: string;
-}
-
 export const Schedule = (): JSX.Element => {
   const { t } = useTranslation();
   const [weeks, setWeeks] = useState<string[]>([]);
   const [selectedWeek, setSelectedWeek] = useState<string>("");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
-  const [homeTimes, setHomeTimes] = useState<HomeTime[]>([]);
 
   useEffect(() => {
     fetchWeeks();
@@ -38,7 +29,6 @@ export const Schedule = (): JSX.Element => {
   useEffect(() => {
     if (selectedWeek) {
       fetchTimetable();
-      fetchHomeTimes();
     }
   }, [selectedWeek]);
 
@@ -76,20 +66,6 @@ export const Schedule = (): JSX.Element => {
     setTimetable(data || []);
   };
 
-  const fetchHomeTimes = async () => {
-    const { data, error } = await supabase
-      .from('home_times')
-      .select('*')
-      .eq('week', selectedWeek);
-
-    if (error) {
-      console.error('Error fetching home times:', error);
-      return;
-    }
-
-    setHomeTimes(data || []);
-  };
-
   const days = [2, 3, 4, 5, 6, 7];
   const morningPeriods = [1, 2, 3, 4, 5];
   const afternoonPeriods = [6, 7, 8, 9];
@@ -113,10 +89,13 @@ export const Schedule = (): JSX.Element => {
     };
   };
 
-  const getHomeTime = (day: number, period: 'morning' | 'afternoon') => {
-    const homeTime = homeTimes.find(ht => ht.day === day);
-    if (!homeTime) return "Không có";
-    return period === 'morning' ? homeTime.morning_time : homeTime.afternoon_time;
+  const getHomeTime = (day: number) => {
+    const dayEntries = timetable.filter(entry => entry.day === day && entry.period <= 5);
+    const periodCount = dayEntries.length;
+    
+    if (periodCount === 4) return '10:35';
+    if (periodCount === 5) return '11:25';
+    return '';
   };
 
   return (
@@ -208,7 +187,7 @@ export const Schedule = (): JSX.Element => {
                   <td className="border p-2 font-semibold font-inter text-center">{t('homeTime')}</td>
                   {days.map(day => (
                     <td key={`home-${day}`} className="border p-2 font-inter text-sm text-gray-600 dark:text-gray-400">
-                      {getHomeTime(day, 'morning')}
+                      {getHomeTime(day)}
                     </td>
                   ))}
                 </tr>
@@ -261,14 +240,6 @@ export const Schedule = (): JSX.Element => {
                       </td>
                     );
                   })}
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-800">
-                  <td className="border p-2 font-semibold font-inter text-center">{t('homeTime')}</td>
-                  {days.map(day => (
-                    <td key={`home-${day}`} className="border p-2 font-inter text-sm text-gray-600 dark:text-gray-400">
-                      {getHomeTime(day, 'afternoon')}
-                    </td>
-                  ))}
                 </tr>
               </tbody>
             </table>
