@@ -5,6 +5,7 @@ const resources = {
   en: {
     translation: {
       'submitterName': 'Submitter Name',
+      'optional': 'Optional',
       'strengthWeakness': 'Strength or Weakness?',
       'week': 'Week',
       'personName': 'Name of person with <strength or weakness>',
@@ -60,16 +61,13 @@ const resources = {
       'createUser': 'Create User',
       'users': 'Users',
       'userCreated': 'User created successfully',
-      'userDeleted': 'User deleted successfully',
-      'homeTimes': 'Home Times',
-      'morningHomeTime': 'Morning Home Time',
-      'afternoonHomeTime': 'Afternoon Home Time',
-      'homeTime': 'Home Time'
+      'userDeleted': 'User deleted successfully'
     }
   },
   vi: {
     translation: {
       'submitterName': 'Tên người nộp',
+      'optional': 'Không bắt buộc',
       'strengthWeakness': 'Ưu điểm hay nhược điểm?',
       'week': 'Tuần',
       'personName': 'Tên người có <ưu điểm hay nhược điểm>',
@@ -125,11 +123,7 @@ const resources = {
       'createUser': 'Tạo người dùng',
       'users': 'Người dùng',
       'userCreated': 'Tạo người dùng thành công',
-      'userDeleted': 'Xóa người dùng thành công',
-      'homeTimes': 'Giờ ra về',
-      'morningHomeTime': 'Giờ ra về buổi sáng',
-      'afternoonHomeTime': 'Giờ ra về buổi chiều',
-      'homeTime': 'Giờ ra về'
+      'userDeleted': 'Xóa người dùng thành công'
     }
   }
 };

@@ -11,7 +11,7 @@ import { motion } from "framer-motion";
 
 interface Submission {
   id: string;
-  submitter_name: string;
+  submitter_name?: string;
   type: string;
   week: string;
   person_name: string;
@@ -149,7 +149,9 @@ export const AdminSubmissions = (): JSX.Element => {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <p className="font-medium font-inter">{submission.submitter_name}</p>
+                    {submission.submitter_name && (
+                      <p className="font-medium font-inter">{submission.submitter_name}</p>
+                    )}
                     <p className="text-sm text-gray-600 dark:text-gray-300 font-inter">
                       {t('week')}: {submission.week}
                     </p>
