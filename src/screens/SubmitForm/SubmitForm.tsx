@@ -51,15 +51,21 @@ export const SubmitForm = (): JSX.Element => {
     e.preventDefault();
     
     try {
+      const submission = {
+        type: selectedType,
+        week,
+        person_name: personName,
+        notes
+      };
+
+      // Only include submitter_name if it's not empty
+      if (submitterName.trim()) {
+        submission['submitter_name'] = submitterName.trim();
+      }
+
       const { error } = await supabase
         .from('submissions')
-        .insert({
-          submitter_name: submitterName,
-          type: selectedType,
-          week,
-          person_name: personName,
-          notes
-        });
+        .insert(submission);
 
       if (error) throw error;
 
@@ -107,14 +113,13 @@ export const SubmitForm = (): JSX.Element => {
             >
               <div>
                 <Label htmlFor="submitter-name" className="text-base font-semibold font-inter">
-                  {t('submitterName')}
+                  {t('submitterName')} ({t('optional')})
                 </Label>
                 <AnimatedInput
                   id="submitter-name"
                   className="mt-2 h-12 font-inter"
                   value={submitterName}
                   onChange={(e) => setSubmitterName(e.target.value)}
-                  required
                 />
               </div>
 
