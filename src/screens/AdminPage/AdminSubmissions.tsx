@@ -17,6 +17,8 @@ interface Submission {
   person_name: string;
   notes: string;
   status: string;
+  period?: string;
+  time_of_day?: string;
 }
 
 export const AdminSubmissions = (): JSX.Element => {
@@ -24,6 +26,9 @@ export const AdminSubmissions = (): JSX.Element => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [weeks, setWeeks] = useState<string[]>([]);
   const [selectedWeek, setSelectedWeek] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedTimeOfDay, setSelectedTimeOfDay] = useState<string>('all');
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('all');
 
   useEffect(() => {
     fetchWeeks();
@@ -54,6 +59,18 @@ export const AdminSubmissions = (): JSX.Element => {
       query = query.eq('week', selectedWeek);
     }
 
+    if (selectedStatus !== 'all') {
+      query = query.eq('status', selectedStatus);
+    }
+
+    if (selectedTimeOfDay !== 'all') {
+      query = query.eq('time_of_day', selectedTimeOfDay);
+    }
+
+    if (selectedPeriod !== 'all') {
+      query = query.eq('period', selectedPeriod);
+    }
+
     const { data, error } = await query;
 
     if (error) {
@@ -66,7 +83,7 @@ export const AdminSubmissions = (): JSX.Element => {
 
   useEffect(() => {
     fetchSubmissions();
-  }, [selectedWeek]);
+  }, [selectedWeek, selectedStatus, selectedTimeOfDay, selectedPeriod]);
 
   const updateSubmissionStatus = async (id: string, status: string) => {
     const { error } = await supabase
@@ -107,6 +124,14 @@ export const AdminSubmissions = (): JSX.Element => {
     }
   };
 
+  const periods = [
+    { value: '1', label: 'Tiết 1' },
+    { value: '2', label: 'Tiết 2' },
+    { value: '3', label: 'Tiết 3' },
+    { value: '4', label: 'Tiết 4' },
+    { value: '5', label: 'Tiết 5' },
+  ];
+
   return (
     <AnimatedContainer>
       <div className="bg-white dark:bg-gray-900 min-h-screen">
@@ -122,9 +147,9 @@ export const AdminSubmissions = (): JSX.Element => {
             <div className="w-6" />
           </div>
 
-          <div className="mb-6">
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
             <Select value={selectedWeek} onValueChange={setSelectedWeek}>
-              <SelectTrigger className="w-[200px] font-inter">
+              <SelectTrigger className="font-inter">
                 <SelectValue placeholder="Filter by week" />
               </SelectTrigger>
               <SelectContent>
@@ -132,6 +157,47 @@ export const AdminSubmissions = (): JSX.Element => {
                 {weeks.map((week) => (
                   <SelectItem key={week} value={week} className="font-inter">
                     {t('week')} {week}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+              <SelectTrigger className="font-inter">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="font-inter">All Status</SelectItem>
+                <SelectItem value="pending" className="font-inter">{t('pending')}</SelectItem>
+                <SelectItem value="approved" className="font-inter">{t('approved')}</SelectItem>
+                <SelectItem value="rejected" className="font-inter">{t('rejected')}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={selectedTimeOfDay} onValueChange={setSelectedTimeOfDay}>
+              <SelectTrigger className="font-inter">
+                <SelectValue placeholder="Filter by time" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="font-inter">All Times</SelectItem>
+                <SelectItem value="morning" className="font-inter">Sáng</SelectItem>
+                <SelectItem value="afternoon" className="font-inter">Chiều</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select 
+              value={selectedPeriod} 
+              onValueChange={setSelectedPeriod}
+              disabled={selectedTimeOfDay === 'all'}
+            >
+              <SelectTrigger className="font-inter">
+                <SelectValue placeholder="Filter by period" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all" className="font-inter">All Periods</SelectItem>
+                {periods.map((period) => (
+                  <SelectItem key={period.value} value={period.value} className="font-inter">
+                    {period.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -158,6 +224,12 @@ export const AdminSubmissions = (): JSX.Element => {
                     <p className="text-sm text-gray-600 dark:text-gray-300 font-inter">
                       {submission.type === 'strength' ? t('strength') : t('weakness')}: {submission.person_name}
                     </p>
+                    {submission.time_of_day && (
+                      <p className="text-sm text-gray-600 dark:text-gray-300 font-inter">
+                        {submission.time_of_day === 'morning' ? 'Sáng' : 'Chiều'}
+                        {submission.period && ` - Tiết ${submission.period}`}
+                      </p>
+                    )}
                     <p className="text-sm mt-2 font-inter">{submission.notes}</p>
                   </div>
                   <div className="flex gap-2">

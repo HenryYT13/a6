@@ -22,6 +22,8 @@ export const SubmitForm = (): JSX.Element => {
   const [notes, setNotes] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
+  const [timeOfDay, setTimeOfDay] = useState<string>("morning");
+  const [period, setPeriod] = useState<string>("1");
 
   useEffect(() => {
     fetchWeeks();
@@ -55,7 +57,9 @@ export const SubmitForm = (): JSX.Element => {
         type: selectedType,
         week,
         person_name: personName,
-        notes
+        notes,
+        time_of_day: timeOfDay,
+        period
       };
 
       // Only include submitter_name if it's not empty
@@ -84,6 +88,14 @@ export const SubmitForm = (): JSX.Element => {
   const getPersonNameLabel = () => {
     return `Tên người có ${selectedType === 'strength' ? 'ưu điểm' : 'nhược điểm'}`;
   };
+
+  const periods = [
+    { value: "1", label: "Tiết 1" },
+    { value: "2", label: "Tiết 2" },
+    { value: "3", label: "Tiết 3" },
+    { value: "4", label: "Tiết 4" },
+    { value: "5", label: "Tiết 5" },
+  ];
 
   return (
     <AnimatedContainer>
@@ -156,6 +168,45 @@ export const SubmitForm = (): JSX.Element => {
                     {availableWeeks.map((weekNumber) => (
                       <SelectItem key={weekNumber} value={weekNumber} className="font-inter">
                         {t('week')} {weekNumber}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="time-of-day" className="text-base font-semibold font-inter">
+                  Buổi
+                </Label>
+                <Select 
+                  value={timeOfDay}
+                  onValueChange={setTimeOfDay}
+                >
+                  <SelectTrigger id="time-of-day" className="mt-2 h-12 font-inter">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="morning" className="font-inter">Sáng</SelectItem>
+                    <SelectItem value="afternoon" className="font-inter">Chiều</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="period" className="text-base font-semibold font-inter">
+                  Tiết
+                </Label>
+                <Select 
+                  value={period}
+                  onValueChange={setPeriod}
+                >
+                  <SelectTrigger id="period" className="mt-2 h-12 font-inter">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {periods.map((p) => (
+                      <SelectItem key={p.value} value={p.value} className="font-inter">
+                        {p.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
