@@ -61,7 +61,8 @@ const resources = {
       'createUser': 'Create User',
       'users': 'Users',
       'userCreated': 'User created successfully',
-      'userDeleted': 'User deleted successfully'
+      'userDeleted': 'User deleted successfully',
+      'homeTime': 'Estimate home time:'
     }
   },
   vi: {
@@ -123,7 +124,8 @@ const resources = {
       'createUser': 'Tạo người dùng',
       'users': 'Người dùng',
       'userCreated': 'Tạo người dùng thành công',
-      'userDeleted': 'Xóa người dùng thành công'
+      'userDeleted': 'Xóa người dùng thành công',
+      'homeTime': 'Giờ ra về dự kiến:'
     }
   }
 };
