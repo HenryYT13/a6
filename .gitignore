@@ -22,3 +22,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+supabase/migrations/20250907183300_add_timetable_table.sql

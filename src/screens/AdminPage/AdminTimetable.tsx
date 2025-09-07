@@ -15,7 +15,6 @@ interface TimetableEntry {
   period: number;
   subject: string;
   uniform: string;
-  hometime?: string;
 }
 
 export const AdminTimetable = (): JSX.Element => {
@@ -26,7 +25,6 @@ export const AdminTimetable = (): JSX.Element => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("1");
   const [selectedSubject, setSelectedSubject] = useState<string>("");
   const [selectedUniform, setSelectedUniform] = useState<string>("Áo Trắng");
-  const [hometime, setHometime] = useState<string>("");
   const [timetable, setTimetable] = useState<TimetableEntry[]>([]);
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<'success' | 'error'>('success');
@@ -36,8 +34,6 @@ export const AdminTimetable = (): JSX.Element => {
     if (selectedWeek && selectedDay) {
       fetchTimetable();
     }
-    // Reset hometime when day changes
-    setHometime("");
   }, [selectedWeek, selectedDay]);
 
   const fetchWeeks = async () => {
@@ -73,33 +69,17 @@ export const AdminTimetable = (): JSX.Element => {
 
     setTimetable(data);
     
-    // Find if there's a hometime entry for this day
-    if (data && data.length > 0) {
-      const dayEntry = data.find(entry => entry.hometime);
-      if (dayEntry) {
-        setHometime(dayEntry.hometime || '');
-      } else {
-        setHometime('');
-      }
-    } else {
-      setHometime('');
-    }
   };
 
   const handleSubmit = async () => {
     try {
-      const entryData: Partial<TimetableEntry> = {
+      const entryData = {
         week: selectedWeek,
         day: parseInt(selectedDay),
         period: parseInt(selectedPeriod),
         subject: selectedSubject,
         uniform: selectedUniform
       };
-
-      // Only add hometime if it's a valid time
-      if (hometime && /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(hometime)) {
-        entryData.hometime = hometime;
-      }
 
       const { error } = await supabase
         .from('timetable')
@@ -245,19 +225,7 @@ export const AdminTimetable = (): JSX.Element => {
                   </Select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1 font-inter">Thời gian tan học</label>
-                  <input
-                    type="time"
-                    value={hometime}
-                    onChange={(e) => setHometime(e.target.value)}
-                    className="w-full p-2 border rounded font-inter"
-                    step="300"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Để trống nếu không cần thay đổi</p>
-                </div>
-
-                <Button onClick={handleSubmit} className="w-full font-inter">
+<Button onClick={handleSubmit} className="w-full font-inter">
                   {t('save')}
                 </Button>
               </div>

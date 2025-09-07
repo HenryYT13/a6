@@ -14,7 +14,6 @@ interface TimetableEntry {
   period: number;
   subject: string;
   uniform: string;
-  hometime?: string;
 }
 
 export const Schedule = (): JSX.Element => {
@@ -88,12 +87,6 @@ export const Schedule = (): JSX.Element => {
       morning: [...new Set(morning)].join(', ') || 'Không có',
       afternoon: [...new Set(afternoon)].join(', ') || 'Không có'
     };
-  };
-
-  const getHomeTime = (day: number) => {
-    // Find the first entry for this day that has a hometime set
-    const dayEntry = timetable.find(entry => entry.day === day && entry.hometime);
-    return dayEntry?.hometime || '';
   };
 
   return (
@@ -177,23 +170,6 @@ export const Schedule = (): JSX.Element => {
                     return (
                       <td key={`uniform-${day}`} className="border p-2 font-inter text-sm text-gray-600 dark:text-gray-400">
                         {uniforms.morning}
-                      </td>
-                    );
-                  })}
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-800">
-                  <td className="border p-2 font-semibold font-inter text-center">{t('homeTime')}</td>
-                  {days.map(day => {
-                    const hometime = getHomeTime(day);
-                    return (
-                      <td key={`home-${day}`} className="border p-2 font-inter text-sm">
-                        {hometime ? (
-                          <span className="text-green-600 dark:text-green-400 font-medium">
-                            {hometime}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">--:--</span>
-                        )}
                       </td>
                     );
                   })}
