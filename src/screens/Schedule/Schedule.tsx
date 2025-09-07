@@ -14,6 +14,7 @@ interface TimetableEntry {
   period: number;
   subject: string;
   uniform: string;
+  hometime?: string;
 }
 
 export const Schedule = (): JSX.Element => {
@@ -90,12 +91,8 @@ export const Schedule = (): JSX.Element => {
   };
 
   const getHomeTime = (day: number) => {
-    const dayEntries = timetable.filter(entry => entry.day === day && entry.period <= 5);
-    const periodCount = dayEntries.length;
-    
-    if (periodCount === 4) return '10:50';
-    if (periodCount === 5) return '11:25';
-    return '';
+    const dayEntry = timetable.find(entry => entry.day === day);
+    return dayEntry?.hometime || '';
   };
 
   return (
