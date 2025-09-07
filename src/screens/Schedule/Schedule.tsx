@@ -93,7 +93,7 @@ export const Schedule = (): JSX.Element => {
     const dayEntries = timetable.filter(entry => entry.day === day && entry.period <= 5);
     const periodCount = dayEntries.length;
     
-    if (periodCount === 4) return '10:35';
+    if (periodCount === 4) return '10:50';
     if (periodCount === 5) return '11:25';
     return '';
   };
