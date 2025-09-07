@@ -91,7 +91,8 @@ export const Schedule = (): JSX.Element => {
   };
 
   const getHomeTime = (day: number) => {
-    const dayEntry = timetable.find(entry => entry.day === day);
+    // Find the first entry for this day that has a hometime set
+    const dayEntry = timetable.find(entry => entry.day === day && entry.hometime);
     return dayEntry?.hometime || '';
   };
 
@@ -182,11 +183,20 @@ export const Schedule = (): JSX.Element => {
                 </tr>
                 <tr className="bg-gray-50 dark:bg-gray-800">
                   <td className="border p-2 font-semibold font-inter text-center">{t('homeTime')}</td>
-                  {days.map(day => (
-                    <td key={`home-${day}`} className="border p-2 font-inter text-sm text-gray-600 dark:text-gray-400">
-                      {getHomeTime(day)}
-                    </td>
-                  ))}
+                  {days.map(day => {
+                    const hometime = getHomeTime(day);
+                    return (
+                      <td key={`home-${day}`} className="border p-2 font-inter text-sm">
+                        {hometime ? (
+                          <span className="text-green-600 dark:text-green-400 font-medium">
+                            {hometime}
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">--:--</span>
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
               </tbody>
             </table>
